@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../Services/api";
 import { PostsProps } from "../../types";
-
+import Post from "../../Components/Post";
 export default function Timeline() {
   const [posts, setPosts] = useState<PostsProps[]>([]);
   useEffect(() => {
@@ -14,11 +14,7 @@ export default function Timeline() {
   return (
     <>
       {posts.map((post) => (
-        <div>
-          <h1>{post.username}</h1>
-          <p>{post.post}</p>
-          <p>{post.likes}</p>
-        </div>
+        <Post id={post.id} likes={post.likes} post={post.post} username={post.username} />
       ))}
     </>
   );
