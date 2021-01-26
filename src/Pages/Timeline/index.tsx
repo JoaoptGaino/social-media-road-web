@@ -1,21 +1,45 @@
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  Icon,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import Posts from "../../Components/Posts";
 import api from "../../Services/api";
 import { PostsProps } from "../../types";
-import Post from "../../Components/Post";
-export default function Timeline() {
+
+const Timeline: React.FC<PostsProps> = ({ post }) => {
   const [posts, setPosts] = useState<PostsProps[]>([]);
+  const [loading,setLoading] = useState(false);
   useEffect(() => {
-    async function getAllPosts() {
+    async function getPosts() {
+      setLoading(true);
       const response = await api.get("posts");
       setPosts(response.data);
+      console.log(response.data);
+      setLoading(false);
     }
-    getAllPosts();
-  }, []);
+    getPosts();
+  },[]);
   return (
-    <>
-      {posts.map((post) => (
-        <Post id={post.id} likes={post.likes} post={post.post} username={post.username} />
-      ))}
-    </>
+    <div style={{ padding: 10 }}>
+      <div
+        style={{ maxWidth: "500px", margin: "0 auto", paddingTop: "20px" }}
+      >
+          {loading ? <Typography variant="overline">Loading....</Typography>
+          :
+          posts.map((post,i)=>(
+            <Posts key={i} post={post.post} />
+          ))
+          }
+      </div>
+    </div>
   );
-}
+};
+export default Timeline;
